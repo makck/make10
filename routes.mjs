@@ -10,11 +10,11 @@ export default function bindRoutes(app) {
   // Main index page for game
   app.get('/', GamesController.index);
 
-  // Create a new game
-  app.post('/game', GamesController.createGame);
-
   // View available games in lobby
   app.get('/lobby', GamesController.viewLobby);
+
+  // Create a new game
+  app.post('/game', GamesController.createGame);
 
   // Join a game created in the lobby
   app.put('/game/:id/join', GamesController.joinGame);
