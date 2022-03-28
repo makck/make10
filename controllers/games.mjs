@@ -33,7 +33,7 @@ const shuffleCards = (cards) => {
 };
 
 /**
- * Function to create the deck of cards
+ * Function to create the deck of cards, less the queen of spades
  * @returns Array of object which forms the deck of cards
  */
 const makeDeck = () => {
@@ -70,7 +70,9 @@ const makeDeck = () => {
         image: cardImage,
       };
 
-      deck.push(card);
+      if (!(card.rank === 12 && card.suit === 'spades')) {
+        deck.push(card);
+      }
 
       rankCounter += 1;
     }
@@ -78,6 +80,49 @@ const makeDeck = () => {
   }
 
   return deck;
+};
+
+// Check if valid pair when player select
+
+// Player discard selected pairs
+
+// Computer discard all pairs on hand
+
+/**
+ * Deal starting hand to players
+ * @param numberOfPlayers
+ * @param cardDeck
+ * @returns Player hand array of card objects
+ */
+const dealStartingCards = (numberOfPlayers, cardDeck) => {
+  const player1Hand = [];
+  const player2Hand = [];
+  const player3Hand = [];
+  const player4Hand = [];
+
+  if (numberOfPlayers === 3) {
+    while (cardDeck.length !== 0) {
+      player1Hand.append(cardDeck.pop());
+      player2Hand.append(cardDeck.pop());
+      player3Hand.append(cardDeck.pop());
+    }
+    return { player1Hand, player2Hand, player3Hand };
+  } if (numberOfPlayers === 4) {
+    while (cardDeck.length !== 0) {
+      player1Hand.append(cardDeck.pop());
+      player2Hand.append(cardDeck.pop());
+      player3Hand.append(cardDeck.pop());
+      player4Hand.append(cardDeck.pop());
+    }
+    return {
+      player1Hand, player2Hand, player3Hand, player4Hand,
+    };
+  }
+  while (cardDeck.length !== 0) {
+    player1Hand.append(cardDeck.pop());
+    player2Hand.append(cardDeck.pop());
+  }
+  return { player1Hand, player2Hand };
 };
 
 // =================================================================================
@@ -90,30 +135,35 @@ export default function initGamesController(db) {
     res.render('index');
   };
 
-  // Render page to view avaialble games to join
-  const viewLobby = async (req, res) => {
-    try {
-      const availableGames = await db.Game.findAll()
-
-      res.render('gameLobby')
-    } catch (error) {
-      response.status(500).send(error);
-  } 
-
   // create a new game and insert a new row in the DB.
   const create = async (req, res) => {
     // Create a deck of shuffled cards
     const cardDeck = shuffleCards(makeDeck());
 
     // Create objects representing 2 players
+    // Deal 5 cards for each player
+    const player1Hand = [];
+    const player2Hand = [];
 
-    // Deal 6 cards for each player
-    const playerHand = [cardDeck.pop(), cardDeck.pop()];
+    for (let i = 0; i < 4; i += 1) {
+      player1Hand.append(cardDeck.pop());
+      player2Hand.append(cardDeck.pop());
+    }
+
+    // Create the discard pile
+    const discardPile = [];
+
+    // Initialise player scores
+    const player1Score = 0;
+    const player2Score = 0;
 
     const newGame = {
       gameState: {
+        gameProgress: 'In Progress',
         cardDeck,
-        playerHand,
+        player1Hand,
+        player2Hand,
+        discardPile,
       },
     };
 
@@ -123,12 +173,12 @@ export default function initGamesController(db) {
 
       // send the new game back to the user.
       // dont include the deck so the user can't cheat
-      response.send({
+      res.send({
         id: game.id,
         playerHand: game.gameState.playerHand,
       });
     } catch (error) {
-      response.status(500).send(error);
+      res.status(500).send(error);
     }
   };
 
@@ -164,6 +214,6 @@ export default function initGamesController(db) {
   return {
     index,
     viewLobby,
-    create
+    create,
   };
 }
