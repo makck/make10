@@ -82,7 +82,18 @@ const makeDeck = () => {
   return deck;
 };
 
-// Check if valid pair when player select
+/**
+ * Check if valid pair when player select
+ * @param card1
+ * @param card2
+ * @returns boolean
+ */
+const checkValidPair = (card1, card2) => {
+  if (card1.rank === card2.rank) {
+    return true;
+  }
+  return false;
+};
 
 // Player discard selected pairs
 
