@@ -162,25 +162,25 @@ const dealStartingCards = (numberOfPlayers, cardDeck) => {
 
   if (numberOfPlayers === 3) {
     while (cardDeck.length !== 0) {
-      player1Hand.append(cardDeck.pop());
-      player2Hand.append(cardDeck.pop());
-      player3Hand.append(cardDeck.pop());
+      player1Hand.push(cardDeck.pop());
+      player2Hand.push(cardDeck.pop());
+      player3Hand.push(cardDeck.pop());
     }
     return { player1Hand, player2Hand, player3Hand };
   } if (numberOfPlayers === 4) {
     while (cardDeck.length !== 0) {
-      player1Hand.append(cardDeck.pop());
-      player2Hand.append(cardDeck.pop());
-      player3Hand.append(cardDeck.pop());
-      player4Hand.append(cardDeck.pop());
+      player1Hand.push(cardDeck.pop());
+      player2Hand.push(cardDeck.pop());
+      player3Hand.push(cardDeck.pop());
+      player4Hand.push(cardDeck.pop());
     }
     return {
       player1Hand, player2Hand, player3Hand, player4Hand,
     };
   }
   while (cardDeck.length !== 0) {
-    player1Hand.append(cardDeck.pop());
-    player2Hand.append(cardDeck.pop());
+    player1Hand.push(cardDeck.pop());
+    player2Hand.push(cardDeck.pop());
   }
   return { player1Hand, player2Hand };
 };
@@ -208,29 +208,33 @@ export default function initGamesController(db) {
   };
 
   // create a new game and insert a new row in the DB.
-  const create = async (req, res) => {
+  const createGame = async (req, res) => {
     // Create a deck of shuffled cards
     const cardDeck = shuffleCards(makeDeck());
 
     let overallPlayerHands = {};
-    const player1Hand = [];
-    const player2Hand = [];
+    let player1Hand = [];
+    let player2Hand = [];
 
     overallPlayerHands = dealStartingCards(2, cardDeck);
     player1Hand = overallPlayerHands.player1Hand;
     player2Hand = overallPlayerHands.player2Hand;
 
+    console.log('player1hand', player1Hand);
+    console.log('player2hand', player2Hand);
     // Create the discard pile
     const discardPile = [];
 
     const newGame = {
-      gameState: {
+      game_state: {
         gameProgress: 'In Progress',
         cardDeck,
         player1Hand,
         player2Hand,
         discardPile,
       },
+      created_at: new Date(),
+      updated_at: new Date(),
     };
 
     try {
@@ -241,50 +245,49 @@ export default function initGamesController(db) {
       // dont include the deck so the user can't cheat
       res.send({
         id: game.id,
-        playerHand: game.gameState.player1Hand,
+        playerHand: game.game_state.player1Hand,
       });
     } catch (error) {
       res.status(500).send(error);
     }
   };
 
-  // Player pick card from opponents hand
-  const pickCard = async (req, res) => {
+  // // Player pick card from opponents hand
+  // const pickCard = async (req, res) => {
 
-  };
+  // };
 
-  // deal two new cards from the deck.
-  const deal = async (request, response) => {
-    try {
-      // get the game by the ID passed in the request
-      const game = await db.Game.findByPk(request.params.id);
+  // // deal two new cards from the deck.
+  // const deal = async (request, response) => {
+  //   try {
+  //     // get the game by the ID passed in the request
+  //     const game = await db.Game.findByPk(request.params.id);
 
-      // make changes to the object
-      const playerHand = [game.gameState.cardDeck.pop(), game.gameState.cardDeck.pop()];
+  //     // make changes to the object
+  //     const playerHand = [game.gameState.cardDeck.pop(), game.gameState.cardDeck.pop()];
 
-      // update the game with the new info
-      await game.update({
-        gameState: {
-          cardDeck: game.gameState.cardDeck,
-          playerHand,
-        },
+  //     // update the game with the new info
+  //     await game.update({
+  //       gameState: {
+  //         cardDeck: game.gameState.cardDeck,
+  //         playerHand,
+  //       },
 
-      });
+  //     });
 
-      // send the updated game back to the user.
-      // dont include the deck so the user can't cheat
-      response.send({
-        id: game.id,
-        playerHand: game.gameState.playerHand,
-      });
-    } catch (error) {
-      response.status(500).send(error);
-    }
-  };
+  //     // send the updated game back to the user.
+  //     // dont include the deck so the user can't cheat
+  //     response.send({
+  //       id: game.id,
+  //       playerHand: game.gameState.playerHand,
+  //     });
+  //   } catch (error) {
+  //     response.status(500).send(error);
+  //   }
+  // };
 
   return {
     index,
-    viewLobby,
-    create,
+    createGame,
   };
 }
