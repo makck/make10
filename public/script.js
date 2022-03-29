@@ -75,14 +75,33 @@ const userLogin = () => {
     .post('/login', {
       email: findElements('#emailInput').value,
       password: findElements('#passwordInput').value,
+    })
+    .then((res) => {
+      console.log(res.data);
+      loginDiv.remove();
+
+      appendItems(playerOptions, [startGameButton]);
+      appendItems(mainGameDashboard, [playerOptions]);
+      appendItems(mainContainer, [mainGameDashboard]);
+    })
+    .catch((error) => console.log(error));
+};
+
+// Start game button click
+let currentGame = null;
+const startGame = () => {
+  axios
+    .post('/game')
+    .then((res) => {
+      currentGame = res.data;
+      console.log('CurrentGame', currentGame);
+    })
+    .catch((error) => {
+      console.log(error);
     });
 };
 
 // When log out button is clicked
-
-// When signup button is clicked
-
-// When faced down deck is clicked
 
 // When discarded pile is clicked
 
@@ -108,14 +127,16 @@ const passwordLabel = createLabel('passwordLabel', 'Password');
 const passwordInput = createInput('passwordInput', 'password');
 // Button
 const loginButton = createButton('loginButton', 'Log in');
+loginButton.addEventListener('click', userLogin);
 
-// Create items for signup page
-const registerDiv = createDiv('registerDiv');
-// Name
-const nameLabel = createLabel('nameLabel', 'Name');
-const nameInput = createInput('nameInput', 'text');
-// Button
-const signUpButton = createButton('signUpButton', 'Sign up');
+// Create gameplay dashboard
+const mainGameDashboard = createDiv('mainGameDashboard');
+const opponentDashboard = createDiv('opponentDashboard');
+const playerDashboard = createDiv('playerDashboard');
+const playerOptions = createDiv('playerOptions');
+
+const startGameButton = createButton('startGameButton', 'Start Game');
+startGameButton.addEventListener('click', startGame);
 
 appendItems(emailDiv, [emailLabel, emailInput]);
 appendItems(passwordDiv, [passwordLabel, passwordInput]);
