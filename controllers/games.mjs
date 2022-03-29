@@ -185,6 +185,18 @@ const dealStartingCards = (numberOfPlayers, cardDeck) => {
   return { player1Hand, player2Hand };
 };
 
+// Player to pick card from opponents hand
+const pickCard = (playerHand, opponentHand, selectedCard) => {
+  for (let i = 0; i < opponentHand.length; i += 1) {
+    if (opponentHand.rank === selectedCard.rank && opponentHand.suit === selectedCard.suit) {
+      opponentHand[i].splice(i, 1);
+    }
+  }
+  playerHand.append(selectedCard);
+
+  return { playerHand, opponentHand };
+};
+
 // =================================================================================
 // ============================== Controller Function ==============================
 // =================================================================================
@@ -200,22 +212,16 @@ export default function initGamesController(db) {
     // Create a deck of shuffled cards
     const cardDeck = shuffleCards(makeDeck());
 
-    // Create objects representing 2 players
-    // Deal 5 cards for each player
+    let overallPlayerHands = {};
     const player1Hand = [];
     const player2Hand = [];
 
-    for (let i = 0; i < 4; i += 1) {
-      player1Hand.append(cardDeck.pop());
-      player2Hand.append(cardDeck.pop());
-    }
+    overallPlayerHands = dealStartingCards(2, cardDeck);
+    player1Hand = overallPlayerHands.player1Hand;
+    player2Hand = overallPlayerHands.player2Hand;
 
     // Create the discard pile
     const discardPile = [];
-
-    // Initialise player scores
-    const player1Score = 0;
-    const player2Score = 0;
 
     const newGame = {
       gameState: {
@@ -235,11 +241,16 @@ export default function initGamesController(db) {
       // dont include the deck so the user can't cheat
       res.send({
         id: game.id,
-        playerHand: game.gameState.playerHand,
+        playerHand: game.gameState.player1Hand,
       });
     } catch (error) {
       res.status(500).send(error);
     }
+  };
+
+  // Player pick card from opponents hand
+  const pickCard = async (req, res) => {
+
   };
 
   // deal two new cards from the deck.
