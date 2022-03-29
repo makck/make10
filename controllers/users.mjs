@@ -18,6 +18,8 @@ export default function initUsersController(db) {
       if (hashedPassword === user.password) {
         res.cookie('loggedIn', true);
         res.cookie('userId', user.id);
+        res.send({ user });
+        console.log('Log in successful');
       } else {
         res.send('you need to log in');
       }
