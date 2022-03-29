@@ -120,7 +120,33 @@ const playerDiscard = (card1, card2, playerHand, discardedPile) => {
   return { tempPlayerHand, discardedPile };
 };
 
-// Computer discard all pairs on hand
+/**
+ * Computer discard all pairs on hand
+ * @param computerHand
+ * @param discardedPile
+ * @returns
+ */
+const computerDiscardPairs = (computerHand, discardedPile) => {
+  computerHand.sort((a, b) => a.rank - b.rank);
+
+  const tempComputerHand = [];
+  tempComputerHand.push(...computerHand);
+
+  for (let i = 0; i < computerHand.length; i += 1) {
+    if (computerHand[i].rank === computerHand[i - 1].rank) {
+      discardedPile.push(tempComputerHand[i]);
+      discardedPile.push(tempComputerHand[i - 1]);
+      tempComputerHand.splice(i, 1);
+      tempComputerHand.splice(i - 1, 1);
+    } else if (computerHand[i].rank === computerHand[i + 1].rank) {
+      discardedPile.push(tempComputerHand[i]);
+      discardedPile.push(tempComputerHand[i + 1]);
+      tempComputerHand.splice(i, 1);
+      tempComputerHand.splice(i + 1, 1);
+    }
+  }
+  return tempComputerHand;
+};
 
 /**
  * Deal starting hand to players
