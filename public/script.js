@@ -101,8 +101,6 @@ const startGame = () => {
     });
 };
 
-// When log out button is clicked
-
 // When discarded pile is clicked
 
 // When turn done is clicked
@@ -138,8 +136,10 @@ const playerOptions = createDiv('playerOptions');
 const startGameButton = createButton('startGameButton', 'Start Game');
 startGameButton.addEventListener('click', startGame);
 
-appendItems(emailDiv, [emailLabel, emailInput]);
-appendItems(passwordDiv, [passwordLabel, passwordInput]);
-appendItems(loginDiv, [emailDiv, passwordDiv, loginButton]);
-appendItems(mainContainer, [loginDiv]);
-appendItems(document.body, [mainContainer]);
+findElements('#loginButton').addEventListener('click', userLogin);
+
+// appendItems(emailDiv, [emailLabel, emailInput]);
+// appendItems(passwordDiv, [passwordLabel, passwordInput]);
+// appendItems(loginDiv, [emailDiv, passwordDiv, loginButton]);
+// appendItems(mainContainer, [loginDiv]);
+// appendItems(document.body, [mainContainer]);
