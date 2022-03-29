@@ -1,35 +1,44 @@
-# make10
+# Old Maid
 
-## Rules
+## Cards Required
 
-- Players are handed 5 starting cards
-- Players will form pairs of cards with values summing up to 10
-- For picture (J, Q, K) or value 10 cards, player will need to get 2 of the same kind
-- At each turn, the player can draw an additional card from the deck, or the last card that the opposing player discard.
-- They will then discard a card. At any point, the player should only be holding 5 cards
-- The winner is determined when one player draws a 6th card which forms the third pair in his hand
+- The standard 52-card pack is used, however, one of the four queens is removed, leaving a total of 51 cards.
+
+## Game Objective
+
+- The goal is to form and discard pairs of cards, and not to be left with the odd card (a queen) at the end.
+
+## The Deal
+
+- Any player shuffles the pack and deals them around, one at a time to each player, until all the cards have been handed out.
+- Players do not need to have an equal number of cards.
+
+## Gameplay
+
+- Each player removes all pairs from his hand face down.
+- If a player has three-of-a-kind, they remove only two of those three cards.
+- The dealer then offers their hand, spread out face down, to the player on the left, who draws one card from it.
+- This player discards any pair that may have been formed by the drawn card.
+- The player then offers their own hand to the player on their left.
+- Play proceeds in this way until all cards have been paired except one - the odd queen, which cannot be paired - and the player who has that card is the Old Maid!
 
 ## Wire Frame
 
-![Image](./ref_docs/make10-wireframe.png)
+![Image](./ref_docs/oldmaid-wireframe.png)
 
 ## ERD
 
-![Image](./ref_docs/make10-erd.png)
+![Image](./ref_docs/oldmaid-erd.png)
 
 ## Milestones
 
 ### Base
 
-- Sign up
+- User log in page
 - User authentication
-- Two player
+- Single player with one AI opponent
 
 ### Comfortable
 
 - Multiplayer, up to 4 players
 - Leaderboard
-
-### More Comfortable
-
-- Game lobby
