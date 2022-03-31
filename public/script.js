@@ -66,6 +66,16 @@ const appendItems = (container, inputArray) => {
 const findElements = (searchKey) => document.querySelector(searchKey);
 
 /**
+ * Remove all contents in divs
+ * @param {*} inputElements
+ */
+const resetElements = (inputElements) => {
+  inputElements.forEach((element) => {
+    element.innerHTML = '';
+  });
+};
+
+/**
  * Function to toggle hold or remove for the card
  * @param {object} inputCard Single card details
  */
@@ -82,10 +92,20 @@ const toggleDiscard = (inputCard) => {
  * @param {object} cardInfo Object containing card details such as suit and rank etc
  * @returns DOM element of each card
  */
-const createCard = (cardInfo, cardImageSource) => {
-  const card = document.createElement('img');
-  card.setAttribute('src', cardImageSource);
-  card.classList.add('card');
+const createCard = (cardInfo) => {
+  const card = createDiv('card');
+  card.setAttribute('class', 'card');
+
+  // const cardImage = document.createElement('img');
+  // cardImage.setAttribute('src', cardImageSource);
+
+  const suit = document.createElement('div');
+  suit.classList.add('suit');
+  suit.innerText = cardInfo.suit;
+
+  const name = document.createElement('div');
+  name.classList.add(cardInfo.name);
+  name.innerText = cardInfo.name;
 
   card.addEventListener('click', () => {
     toggleDiscard(cardInfo);
@@ -97,6 +117,8 @@ const createCard = (cardInfo, cardImageSource) => {
       card.classList.remove('discard-card');
     }
   });
+
+  appendItems(card, [name, suit]);
 
   return card;
 };
@@ -140,6 +162,21 @@ const startGame = () => {
     .then((res) => {
       currentGame = res.data;
       console.log('CurrentGame', currentGame);
+
+      resetElements([mainContainer, opponentDashboard, playerDashboard, playerOptions]);
+
+      for (let i = 0; i < currentGame.player2Hand.length; i += 1) {
+        appendItems(opponentDashboard, [createCard(currentGame.player2Hand[i])]);
+      }
+
+      for (let i = 0; i < currentGame.player1Hand.length; i += 1) {
+        appendItems(playerDashboard, [createCard(currentGame.player1Hand[i])]);
+      }
+
+      appendItems(playerOptions, [discardButton, doneRoundButton]);
+      appendItems(mainGameDashboard, [opponentDashboard, playerDashboard, playerOptions]);
+      appendItems(mainContainer, [mainGameDashboard]);
+      appendItems(document.body, [mainContainer]);
     })
     .catch((error) => {
       console.log(error);
@@ -154,6 +191,8 @@ const startGame = () => {
 // ============================== DOM Elements ==============================
 // =================================================================================
 
+findElements('#loginButton').addEventListener('click', userLogin);
+
 // Main container that will store all other elements
 const mainContainer = createDiv('mainContainer');
 
@@ -167,10 +206,6 @@ const startGameButton = createButton('startGameButton', 'Start Game');
 startGameButton.setAttribute('class', 'btn btn-secondary btn-lg px-4 gap-3');
 startGameButton.addEventListener('click', startGame);
 
-findElements('#loginButton').addEventListener('click', userLogin);
+const discardButton = createButton('discardButton', 'Discard');
 
-// appendItems(emailDiv, [emailLabel, emailInput]);
-// appendItems(passwordDiv, [passwordLabel, passwordInput]);
-// appendItems(loginDiv, [emailDiv, passwordDiv, loginButton]);
-// appendItems(mainContainer, [loginDiv]);
-// appendItems(document.body, [mainContainer]);
+const doneRoundButton = createButton('doneRoundButton', 'Done');
