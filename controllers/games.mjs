@@ -61,7 +61,7 @@ const makeDeck = () => {
 
       let cardImage;
 
-      cardImage = `/public/card-images/${cardName}_of_${currentSuit}.png`;
+      cardImage = `public/card-images/${cardName}_of_${currentSuit}.png`;
 
       const card = {
         name: cardName,
@@ -180,8 +180,12 @@ const dealStartingCards = (numberOfPlayers, cardDeck) => {
     };
   }
   while (cardDeck.length !== 0) {
-    player1Hand.push(cardDeck.pop());
-    player2Hand.push(cardDeck.pop());
+    if (cardDeck.length === 1) {
+      player1Hand.push(cardDeck.pop());
+    } else {
+      player1Hand.push(cardDeck.pop());
+      player2Hand.push(cardDeck.pop());
+    }
   }
   return { player1Hand, player2Hand };
 };
