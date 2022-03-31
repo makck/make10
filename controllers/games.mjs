@@ -204,7 +204,7 @@ const pickCard = (playerHand, opponentHand, selectedCard) => {
 export default function initGamesController(db) {
   // Render main games page
   const index = (req, res) => {
-    res.render('index');
+    res.render('login');
   };
 
   // create a new game and insert a new row in the DB.
@@ -245,7 +245,8 @@ export default function initGamesController(db) {
       // dont include the deck so the user can't cheat
       res.send({
         id: game.id,
-        playerHand: game.game_state.player1Hand,
+        player1Hand: game.game_state.player1Hand,
+        player2Hand: game.game_state.player2Hand,
       });
     } catch (error) {
       res.status(500).send(error);
