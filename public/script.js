@@ -123,6 +123,26 @@ const createCard = (cardInfo) => {
   return card;
 };
 
+const refreshHand = (inputGame) => {
+  resetElements([mainContainer, opponentDashboard, playerDashboard, playerOptions]);
+
+  for (let i = 0; i < inputGame.player2Hand.length; i += 1) {
+    appendItems(opponentDashboard, [createCard(inputGame.player2Hand[i])]);
+  }
+
+  for (let i = 0; i < inputGame.player1Hand.length; i += 1) {
+    appendItems(playerDashboard, [createCard(inputGame.player1Hand[i])]);
+  }
+
+  opponentDashboard.setAttribute('class', 'card-display');
+  playerDashboard.setAttribute('class', 'card-display');
+
+  appendItems(playerOptions, [discardButton, doneRoundButton]);
+  appendItems(mainGameDashboard, [opponentDashboard, playerDashboard, playerOptions]);
+  appendItems(mainContainer, [mainGameDashboard]);
+  appendItems(document.body, [mainContainer]);
+};
+
 // =================================================================================
 // ============================== Page Logic Functions ==============================
 // =================================================================================
@@ -163,31 +183,39 @@ const startGame = () => {
       currentGame = res.data;
       console.log('CurrentGame', currentGame);
 
-      resetElements([mainContainer, opponentDashboard, playerDashboard, playerOptions]);
-
-      for (let i = 0; i < currentGame.player2Hand.length; i += 1) {
-        appendItems(opponentDashboard, [createCard(currentGame.player2Hand[i])]);
-      }
-
-      for (let i = 0; i < currentGame.player1Hand.length; i += 1) {
-        appendItems(playerDashboard, [createCard(currentGame.player1Hand[i])]);
-      }
-
-      opponentDashboard.setAttribute('class', 'card-display');
-      playerDashboard.setAttribute('class', 'card-display');
-
-      appendItems(playerOptions, [discardButton, doneRoundButton]);
-      appendItems(mainGameDashboard, [opponentDashboard, playerDashboard, playerOptions]);
-      appendItems(mainContainer, [mainGameDashboard]);
-      appendItems(document.body, [mainContainer]);
+      refreshHand(currentGame);
     })
     .catch((error) => {
       console.log(error);
     });
 };
 
-// When discarded pile is clicked
-
+// When discard button is clicked, check if selected pair is valid
+const discardCards = () => {
+  const discardedCards = [];
+  const updatedHand = [];
+  for (let i = 0; i < currentGame.player1Hand.length; i += 1) {
+    if (currentGame.player1Hand[i].discardStatus === 'discard') {
+      discardedCards.push(currentGame.player1Hand[i]);
+    } else {
+      updatedHand.push(currentGame.player1Hand[i]);
+    }
+  }
+  try {
+    axios
+      .put(`/game/${currentGame.id}/discard`, {
+        discardHand: discardedCards,
+        newHand: updatedHand,
+      })
+      .then((res) => {
+        currentGame = res.data;
+        console.log('after discard', currentGame);
+        refreshHand(currentGame);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
 // When turn done is clicked
 
 // =================================================================================
@@ -210,5 +238,6 @@ startGameButton.setAttribute('class', 'btn btn-secondary btn-lg px-4 gap-3');
 startGameButton.addEventListener('click', startGame);
 
 const discardButton = createButton('discardButton', 'Discard');
+discardButton.addEventListener('click', discardCards);
 
 const doneRoundButton = createButton('doneRoundButton', 'Done');

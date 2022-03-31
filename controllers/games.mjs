@@ -258,6 +258,30 @@ export default function initGamesController(db) {
     }
   };
 
+  // Player discard card from hand
+  const discardCard = async (req, res) => {
+    try {
+      const game = await db.Game.findByPk(req.params.id);
+
+      const updatedHand = req.body.newHand;
+      const updatedDiscardPile = req.body.discardedHand;
+
+      await game.update({
+        game_state: {
+          player1Hand: updatedHand,
+          player2Hand: game.game_state.player2Hand,
+          discardPile: updatedDiscardPile,
+        },
+      });
+
+      res.send({
+        id: game.id,
+        player1Hand: game.game_state.player1Hand,
+        player2Hand: game.game_state.player2Hand,
+      });
+    } catch (error) { console.log(error); }
+  };
+
   // // Player pick card from opponents hand
   // const pickCard = async (req, res) => {
 
@@ -295,5 +319,6 @@ export default function initGamesController(db) {
   return {
     index,
     createGame,
+    discardCard,
   };
 }
