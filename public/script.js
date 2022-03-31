@@ -128,7 +128,7 @@ const createCard = (cardInfo) => {
  * @param {*} inputGame
  */
 const refreshHand = (inputGame) => {
-  resetElements([mainContainer, opponentDashboard, playerDashboard, playerOptions]);
+  resetElements([mainContainer, opponentDashboard, playerDashboard, opponentCardDisplay, playerCardDisplay, playerOptions]);
 
   for (let i = 0; i < inputGame.player2Hand.length; i += 1) {
     appendItems(opponentCardDisplay, [createCard(inputGame.player2Hand[i])]);
@@ -152,6 +152,20 @@ const refreshHand = (inputGame) => {
   appendItems(mainGameDashboard, [opponentDashboard, playerDashboard, playerOptions]);
   appendItems(mainContainer, [mainGameDashboard]);
   appendItems(document.body, [mainContainer]);
+};
+
+const checkWin = () => {
+  if (currentGame.player1Hand.length === 1) {
+    resetElements([mainContainer, opponentDashboard, playerDashboard, opponentCardDisplay, playerCardDisplay, playerOptions]);
+
+    mainContainer.innerText = 'You lose';
+    return true;
+  } if (currentGame.player1Hand.length === 0) {
+    resetElements([mainContainer, opponentDashboard, playerDashboard, opponentCardDisplay, playerCardDisplay, playerOptions]);
+
+    mainContainer.innerText = 'You lose';
+    return true;
+  }
 };
 
 // =================================================================================
@@ -227,7 +241,22 @@ const discardCards = () => {
     console.log(error);
   }
 };
+
 // When turn done is clicked
+const turnDone = () => {
+  if (checkWin()) {
+    console.log('game end');
+  } else {
+    try {
+      axios
+        .put(`/game/${currentGame.id}/ai-play`)
+        .then((res) => {
+          currentGame = res.data;
+          refreshHand(currentGame);
+        });
+    } catch (error) { console.log(error); }
+  }
+};
 
 // =================================================================================
 // ============================== DOM Elements ==============================
@@ -254,3 +283,4 @@ const discardButton = createButton('discardButton', 'Discard');
 discardButton.addEventListener('click', discardCards);
 
 const doneRoundButton = createButton('doneRoundButton', 'Done');
+doneRoundButton.addEventListener('click', turnDone);

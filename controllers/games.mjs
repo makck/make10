@@ -71,7 +71,7 @@ const makeDeck = () => {
         discardStatus: 'hold',
       };
 
-      if (!(card.rank === 12 && card.suit === 'spades')) {
+      if (!(card.rank === 12 && card.suit === '♠️')) {
         deck.push(card);
       }
 
@@ -127,23 +127,16 @@ const playerDiscard = (card1, card2, playerHand, discardedPile) => {
  * @param discardedPile
  * @returns
  */
-const computerDiscardPairs = (computerHand, discardedPile) => {
+const computerDiscardPairs = (computerHand) => {
   computerHand.sort((a, b) => a.rank - b.rank);
 
   const tempComputerHand = [];
-  tempComputerHand.push(...computerHand);
 
-  for (let i = 0; i < computerHand.length; i += 1) {
-    if (computerHand[i].rank === computerHand[i - 1].rank) {
-      discardedPile.push(tempComputerHand[i]);
-      discardedPile.push(tempComputerHand[i - 1]);
-      tempComputerHand.splice(i, 1);
-      tempComputerHand.splice(i - 1, 1);
-    } else if (computerHand[i].rank === computerHand[i + 1].rank) {
-      discardedPile.push(tempComputerHand[i]);
-      discardedPile.push(tempComputerHand[i + 1]);
-      tempComputerHand.splice(i, 1);
-      tempComputerHand.splice(i + 1, 1);
+  for (let i = 0; i < computerHand.length - 1; i += 1) {
+    if (computerHand[i].rank === computerHand[i + 1].rank) {
+      i += 1;
+    } else {
+      tempComputerHand.push(computerHand[i]);
     }
   }
   return tempComputerHand;
@@ -282,43 +275,47 @@ export default function initGamesController(db) {
     } catch (error) { console.log(error); }
   };
 
-  // // Player pick card from opponents hand
-  // const pickCard = async (req, res) => {
+  // AI play after player is done with turn
+  const aiPlay = async (req, res) => {
+    try {
+      const game = await db.Game.findByPk(req.params.id);
 
-  // };
+      // pick a random card from player hand
+      const playerHand = game.game_state.player1Hand;
+      const computerHand = game.game_state.player2Hand;
+      let selectedCardIndex = getRandomIndex(playerHand.length);
 
-  // // deal two new cards from the deck.
-  // const deal = async (request, response) => {
-  //   try {
-  //     // get the game by the ID passed in the request
-  //     const game = await db.Game.findByPk(request.params.id);
+      computerHand.push(playerHand[selectedCardIndex]);
+      playerHand.splice(selectedCardIndex, 1);
 
-  //     // make changes to the object
-  //     const playerHand = [game.gameState.cardDeck.pop(), game.gameState.cardDeck.pop()];
+      // start discarding pairs
+      const updatedComputerHand = computerDiscardPairs(computerHand);
 
-  //     // update the game with the new info
-  //     await game.update({
-  //       gameState: {
-  //         cardDeck: game.gameState.cardDeck,
-  //         playerHand,
-  //       },
+      // Push one random card to player hand (simulating next turn when player pick card)
+      selectedCardIndex = getRandomIndex(updatedComputerHand.length);
+      playerHand.push(updatedComputerHand[selectedCardIndex]);
+      updatedComputerHand.splice(selectedCardIndex, 1);
 
-  //     });
+      console.log('Player picked this card', updatedComputerHand[selectedCardIndex]);
+      await game.update({
+        game_state: {
+          player1Hand: playerHand,
+          player2Hand: updatedComputerHand,
+        },
+      });
 
-  //     // send the updated game back to the user.
-  //     // dont include the deck so the user can't cheat
-  //     response.send({
-  //       id: game.id,
-  //       playerHand: game.gameState.playerHand,
-  //     });
-  //   } catch (error) {
-  //     response.status(500).send(error);
-  //   }
-  // };
+      res.send({
+        id: game.id,
+        player1Hand: game.game_state.player1Hand,
+        player2Hand: game.game_state.player2Hand,
+      });
+    } catch (error) { console.log(error); }
+  };
 
   return {
     index,
     createGame,
     discardCard,
+    aiPlay,
   };
 }

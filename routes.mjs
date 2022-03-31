@@ -13,10 +13,12 @@ export default function bindRoutes(app) {
   // Create a new game
   app.post('/game', GamesController.createGame);
 
-  // // Update when player discards card from hand
+  // Update when player discards card from hand
   app.put('/game/:id/discard', GamesController.discardCard);
 
+  // AI play when player is done with his turn
+  app.put('/game/:id/ai-play', GamesController.aiPlay);
+
   // user login
-  // app.get('/user', UserController.dashboard);
   app.post('/login', UserController.login);
 }
