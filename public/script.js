@@ -65,6 +65,30 @@ const appendItems = (container, inputArray) => {
 
 const findElements = (searchKey) => document.querySelector(searchKey);
 
+/**
+ * Create DOM element with card visual
+ * @param {object} cardInfo Object containing card details such as suit and rank etc
+ * @returns DOM element of each card
+ */
+const createCard = (cardInfo, cardImageSource) => {
+  const card = document.createElement('img');
+  card.setAttribute('src', cardImageSource);
+  card.classList.add('card');
+
+  card.addEventListener('click', () => {
+    toggleDiscard(cardInfo);
+    if (cardInfo.discardStatus === 'discard') {
+      card.classList.add('discard-card');
+      card.classList.remove('card');
+    } else if (cardInfo.holdStatus === 'hold') {
+      card.classList.add('card');
+      card.classList.remove('discard-card');
+    }
+  });
+
+  return card;
+};
+
 // =================================================================================
 // ============================== Page Logic Functions ==============================
 // =================================================================================
@@ -78,11 +102,20 @@ const userLogin = () => {
     })
     .then((res) => {
       console.log(res.data);
-      loginDiv.remove();
+
+      findElements('#mainContainer').remove();
+      mainContainer.setAttribute('class', 'px-4 py-5 my-5 text-center');
+
+      opponentDashboard.setAttribute('class', 'display-5 fw-bold');
+      opponentDashboard.innerText = 'Old Maid';
+
+      playerDashboard.setAttribute('class', 'col-lg-6 mx-auto');
+      playerDashboard.innerText = 'The goal is to form and discard pairs of cards, and not to be left with the odd card (a queen) at the end. Have fun!';
 
       appendItems(playerOptions, [startGameButton]);
-      appendItems(mainGameDashboard, [playerOptions]);
+      appendItems(mainGameDashboard, [opponentDashboard, playerDashboard, playerOptions]);
       appendItems(mainContainer, [mainGameDashboard]);
+      appendItems(document.body, [mainContainer]);
     })
     .catch((error) => console.log(error));
 };
@@ -112,21 +145,6 @@ const startGame = () => {
 // Main container that will store all other elements
 const mainContainer = createDiv('mainContainer');
 
-// Create items for login page
-// Create divs for login overall, email, password
-const loginDiv = createDiv('loginDiv');
-const emailDiv = createDiv('emailDiv');
-const passwordDiv = createDiv('passwordDiv');
-// Email
-const emailLabel = createLabel('emailLabel', 'Email');
-const emailInput = createInput('emailInput', 'text');
-// Password
-const passwordLabel = createLabel('passwordLabel', 'Password');
-const passwordInput = createInput('passwordInput', 'password');
-// Button
-const loginButton = createButton('loginButton', 'Log in');
-loginButton.addEventListener('click', userLogin);
-
 // Create gameplay dashboard
 const mainGameDashboard = createDiv('mainGameDashboard');
 const opponentDashboard = createDiv('opponentDashboard');
@@ -134,6 +152,7 @@ const playerDashboard = createDiv('playerDashboard');
 const playerOptions = createDiv('playerOptions');
 
 const startGameButton = createButton('startGameButton', 'Start Game');
+startGameButton.setAttribute('class', 'btn btn-secondary btn-lg px-4 gap-3');
 startGameButton.addEventListener('click', startGame);
 
 findElements('#loginButton').addEventListener('click', userLogin);
