@@ -1,25 +1,31 @@
 {
-  "name": "make10",
+  "name": "oldmaid",
   "version": "1.0.0",
-  "description": "## Rules",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.prod.js",
+    "debug": "nodemon --inspect index.mjs",
+    "start": "node index.mjs",
+    "watch": "webpack --watch --config webpack.dev.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/makck/make10.git"
+    "url": "git+https://github.com/makck/oldmaid.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/makck/make10/issues"
+    "url": "https://github.com/makck/oldmaid/issues"
   },
-  "homepage": "https://github.com/makck/make10#readme",
+  "homepage": "https://github.com/makck/oldmaid#readme",
   "dependencies": {
     "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.6",
     "express": "^4.17.3",
+    "html-webpack-plugin": "^5.5.0",
     "jssha": "^3.2.0",
     "method-override": "^3.0.0",
     "node": "^17.7.1",
@@ -27,11 +33,18 @@
     "sequelize": "^6.17.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.4",
+    "css-loader": "^6.7.1",
     "eslint": "^8.11.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
+    "mini-css-extract-plugin": "^2.6.0",
     "sequelize-cli": "^6.4.1",
+    "style-loader": "^3.3.1",
     "webpack": "^5.70.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
   }
 }
