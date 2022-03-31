@@ -39,7 +39,7 @@ const shuffleCards = (cards) => {
 const makeDeck = () => {
   const deck = [];
 
-  const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+  const suits = ['❤️', '♦️', '♣️', '♠️'];
 
   let suitIndex = 0;
   while (suitIndex < suits.length) {

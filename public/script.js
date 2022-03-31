@@ -82,7 +82,7 @@ const resetElements = (inputElements) => {
 const toggleDiscard = (inputCard) => {
   if (inputCard.discardStatus === 'hold') {
     inputCard.discardStatus = 'discard';
-  } else {
+  } else if (inputCard.discardStatus === 'discard') {
     inputCard.discardStatus = 'hold';
   }
 };
@@ -104,7 +104,7 @@ const createCard = (cardInfo) => {
   suit.innerText = cardInfo.suit;
 
   const name = document.createElement('div');
-  name.classList.add(cardInfo.name);
+  // name.classList.add('name');
   name.innerText = cardInfo.name;
 
   card.addEventListener('click', () => {
@@ -172,6 +172,9 @@ const startGame = () => {
       for (let i = 0; i < currentGame.player1Hand.length; i += 1) {
         appendItems(playerDashboard, [createCard(currentGame.player1Hand[i])]);
       }
+
+      opponentDashboard.setAttribute('class', 'card-display');
+      playerDashboard.setAttribute('class', 'card-display');
 
       appendItems(playerOptions, [discardButton, doneRoundButton]);
       appendItems(mainGameDashboard, [opponentDashboard, playerDashboard, playerOptions]);
