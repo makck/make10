@@ -66,6 +66,18 @@ const appendItems = (container, inputArray) => {
 const findElements = (searchKey) => document.querySelector(searchKey);
 
 /**
+ * Function to toggle hold or remove for the card
+ * @param {object} inputCard Single card details
+ */
+const toggleDiscard = (inputCard) => {
+  if (inputCard.discardStatus === 'hold') {
+    inputCard.discardStatus = 'discard';
+  } else {
+    inputCard.discardStatus = 'hold';
+  }
+};
+
+/**
  * Create DOM element with card visual
  * @param {object} cardInfo Object containing card details such as suit and rank etc
  * @returns DOM element of each card

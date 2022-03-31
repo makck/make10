@@ -68,6 +68,7 @@ const makeDeck = () => {
         suit: currentSuit,
         rank: rankCounter,
         image: cardImage,
+        discardStatus: 'hold',
       };
 
       if (!(card.rank === 12 && card.suit === 'spades')) {
