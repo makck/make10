@@ -123,20 +123,31 @@ const createCard = (cardInfo) => {
   return card;
 };
 
+/**
+ * Refresh the card display on frontend
+ * @param {*} inputGame
+ */
 const refreshHand = (inputGame) => {
   resetElements([mainContainer, opponentDashboard, playerDashboard, playerOptions]);
 
   for (let i = 0; i < inputGame.player2Hand.length; i += 1) {
-    appendItems(opponentDashboard, [createCard(inputGame.player2Hand[i])]);
+    appendItems(opponentCardDisplay, [createCard(inputGame.player2Hand[i])]);
   }
 
   for (let i = 0; i < inputGame.player1Hand.length; i += 1) {
-    appendItems(playerDashboard, [createCard(inputGame.player1Hand[i])]);
+    appendItems(playerCardDisplay, [createCard(inputGame.player1Hand[i])]);
   }
 
   opponentDashboard.setAttribute('class', 'card-display');
-  playerDashboard.setAttribute('class', 'card-display');
+  opponentDashboard.innerText = "Opponent's Cards";
+  opponentCardDisplay.setAttribute('class', 'card-display');
 
+  playerDashboard.setAttribute('class', 'card-display');
+  playerDashboard.innerText = 'Your Cards';
+  playerCardDisplay.setAttribute('class', 'card-display');
+
+  appendItems(opponentDashboard, [opponentCardDisplay]);
+  appendItems(playerDashboard, [playerCardDisplay]);
   appendItems(playerOptions, [discardButton, doneRoundButton]);
   appendItems(mainGameDashboard, [opponentDashboard, playerDashboard, playerOptions]);
   appendItems(mainContainer, [mainGameDashboard]);
@@ -230,7 +241,9 @@ const mainContainer = createDiv('mainContainer');
 // Create gameplay dashboard
 const mainGameDashboard = createDiv('mainGameDashboard');
 const opponentDashboard = createDiv('opponentDashboard');
+const opponentCardDisplay = createDiv('opponentCardDisplay');
 const playerDashboard = createDiv('playerDashboard');
+const playerCardDisplay = createDiv('playerCardDisplay');
 const playerOptions = createDiv('playerOptions');
 
 const startGameButton = createButton('startGameButton', 'Start Game');
