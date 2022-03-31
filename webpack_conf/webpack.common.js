@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    main: './src/index.js',
+    main: '../src/script.js',
   },
   output: {
     filename: '[name]-[contenthash].bundle.js',
