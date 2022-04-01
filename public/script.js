@@ -163,7 +163,7 @@ const checkWin = () => {
   } if (currentGame.player1Hand.length === 0) {
     resetElements([mainContainer, opponentDashboard, playerDashboard, opponentCardDisplay, playerCardDisplay, playerOptions]);
 
-    mainContainer.innerText = 'You lose';
+    mainContainer.innerText = 'You win';
     return true;
   }
 };
@@ -252,6 +252,7 @@ const turnDone = () => {
         .put(`/game/${currentGame.id}/ai-play`)
         .then((res) => {
           currentGame = res.data;
+          console.log('after turn done', currentGame);
           refreshHand(currentGame);
         });
     } catch (error) { console.log(error); }

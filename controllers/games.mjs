@@ -132,13 +132,16 @@ const computerDiscardPairs = (computerHand) => {
 
   const tempComputerHand = [];
 
-  for (let i = 0; i < computerHand.length - 1; i += 1) {
-    if (computerHand[i].rank === computerHand[i + 1].rank) {
+  for (let i = 0; i < computerHand.length; i += 1) {
+    if (i === computerHand.length - 1) {
+      tempComputerHand.push(computerHand[i]);
+    } else if (computerHand[i].rank === computerHand[i + 1].rank) {
       i += 1;
     } else {
       tempComputerHand.push(computerHand[i]);
     }
   }
+
   return tempComputerHand;
 };
 
@@ -292,11 +295,15 @@ export default function initGamesController(db) {
       const updatedComputerHand = computerDiscardPairs(computerHand);
 
       // Push one random card to player hand (simulating next turn when player pick card)
-      selectedCardIndex = getRandomIndex(updatedComputerHand.length);
-      playerHand.push(updatedComputerHand[selectedCardIndex]);
-      updatedComputerHand.splice(selectedCardIndex, 1);
+      if (updatedComputerHand.length > 1) {
+        selectedCardIndex = getRandomIndex(updatedComputerHand.length);
+        playerHand.push(updatedComputerHand[selectedCardIndex]);
+        updatedComputerHand.splice(selectedCardIndex, 1);
+        console.log('Player picked this card', updatedComputerHand[selectedCardIndex]);
+      }
 
-      console.log('Player picked this card', updatedComputerHand[selectedCardIndex]);
+      // Need logic to check if have last card but not queen, need to continue game
+
       await game.update({
         game_state: {
           player1Hand: playerHand,
