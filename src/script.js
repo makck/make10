@@ -1,3 +1,6 @@
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 // =================================================================================
 // ============================== Helper Functions ==============================
 // =================================================================================
@@ -96,16 +99,16 @@ const createCard = (cardInfo) => {
   const card = createDiv('card');
   card.setAttribute('class', 'card');
 
-  // const cardImage = document.createElement('img');
-  // cardImage.setAttribute('src', cardImageSource);
+  const cardImageSource = cardInfo.image;
+  const cardImage = document.createElement('img');
+  cardImage.setAttribute('src', cardImageSource);
 
-  const suit = document.createElement('div');
-  suit.classList.add('suit');
-  suit.innerText = cardInfo.suit;
+  // const suit = document.createElement('div');
+  // suit.classList.add('suit');
+  // suit.innerText = cardInfo.suit;
 
-  const name = document.createElement('div');
-  // name.classList.add('name');
-  name.innerText = cardInfo.name;
+  // const name = document.createElement('div');
+  // name.innerText = cardInfo.name;
 
   card.addEventListener('click', () => {
     toggleDiscard(cardInfo);
@@ -118,7 +121,8 @@ const createCard = (cardInfo) => {
     }
   });
 
-  appendItems(card, [name, suit]);
+  // appendItems(card, [name, suit]);
+  appendItems(card, [cardImage]);
 
   return card;
 };

@@ -39,7 +39,8 @@ const shuffleCards = (cards) => {
 const makeDeck = () => {
   const deck = [];
 
-  const suits = ['❤️', '♦️', '♣️', '♠️'];
+  // const suits = ['❤️', '♦️', '♣️', '♠️'];
+  const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
 
   let suitIndex = 0;
   while (suitIndex < suits.length) {
@@ -61,7 +62,7 @@ const makeDeck = () => {
 
       let cardImage;
 
-      cardImage = `public/card-images/${cardName}_of_${currentSuit}.png`;
+      cardImage = `https://tekeye.uk/playing_cards/images/svg_playing_cards/fronts/png_96_dpi/${currentSuit}_${cardName}.png`;
 
       const card = {
         name: cardName,
@@ -71,7 +72,7 @@ const makeDeck = () => {
         discardStatus: 'hold',
       };
 
-      if (!(card.rank === 12 && card.suit === '♠️')) {
+      if (!(card.rank === 12 && card.suit === 'spades')) {
         deck.push(card);
       }
 
