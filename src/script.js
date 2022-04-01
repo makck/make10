@@ -127,6 +127,18 @@ const createCard = (cardInfo) => {
   return card;
 };
 
+const createMaskedCard = () => {
+  const card = createDiv('card');
+  card.setAttribute('class', 'card');
+
+  const cardImage = document.createElement('img');
+  cardImage.setAttribute('src', 'https://tekeye.uk/playing_cards/images/svg_playing_cards/backs/png_96_dpi/blue2.png');
+
+  appendItems(card, [cardImage]);
+
+  return card;
+};
+
 /**
  * Refresh the card display on frontend
  * @param {*} inputGame
@@ -135,7 +147,7 @@ const refreshHand = (inputGame) => {
   resetElements([mainContainer, opponentDashboard, playerDashboard, opponentCardDisplay, playerCardDisplay, playerOptions]);
 
   for (let i = 0; i < inputGame.player2Hand.length; i += 1) {
-    appendItems(opponentCardDisplay, [createCard(inputGame.player2Hand[i])]);
+    appendItems(opponentCardDisplay, [createMaskedCard()]);
   }
 
   for (let i = 0; i < inputGame.player1Hand.length; i += 1) {
