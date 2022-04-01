@@ -226,19 +226,27 @@ const discardCards = () => {
       updatedHand.push(currentGame.player1Hand[i]);
     }
   }
-  try {
-    axios
-      .put(`/game/${currentGame.id}/discard`, {
-        discardHand: discardedCards,
-        newHand: updatedHand,
-      })
-      .then((res) => {
-        currentGame = res.data;
-        console.log('after discard', currentGame);
-        refreshHand(currentGame);
-      });
-  } catch (error) {
-    console.log(error);
+  if (discardedCards.length > 2 || discardedCards.length < 2) {
+    gameInformation.innerText = 'Please discard only 2 cards at a time.';
+    appendItems(playerDashboard, [gameInformation]);
+  } else if (discardedCards[0].rank !== discardedCards[1].rank) {
+    gameInformation.innerText = 'You can only discard same cards.';
+    appendItems(playerDashboard, [gameInformation]);
+  } else {
+    try {
+      axios
+        .put(`/game/${currentGame.id}/discard`, {
+          discardHand: discardedCards,
+          newHand: updatedHand,
+        })
+        .then((res) => {
+          currentGame = res.data;
+          console.log('after discard', currentGame);
+          refreshHand(currentGame);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
@@ -275,6 +283,7 @@ const opponentCardDisplay = createDiv('opponentCardDisplay');
 const playerDashboard = createDiv('playerDashboard');
 const playerCardDisplay = createDiv('playerCardDisplay');
 const playerOptions = createDiv('playerOptions');
+const gameInformation = createDiv('gameInformation');
 
 const startGameButton = createButton('startGameButton', 'Start Game');
 startGameButton.setAttribute('class', 'btn btn-secondary btn-lg px-4 gap-3');

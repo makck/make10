@@ -84,44 +84,6 @@ const makeDeck = () => {
 };
 
 /**
- * Check if valid pair when player select
- * @param card1
- * @param card2
- * @returns boolean
- */
-const checkValidPair = (card1, card2) => {
-  if (card1.rank === card2.rank) {
-    return true;
-  }
-  return false;
-};
-
-/**
- * Discards selected pair from player's hand, and add them in the discarded pile
- * @param card1
- * @param card2
- * @param playerHand
- * @param discardedPile
- * @returns Player hand and discarded pile
- */
-const playerDiscard = (card1, card2, playerHand, discardedPile) => {
-  const tempPlayerHand = [];
-  tempPlayerHand.push(...playerHand);
-
-  for (let i = 0; i < playerHand.length; i += 1) {
-    if (playerHand[i].rank === card1.rank && playerHand[i].suit === card1.suit) {
-      discardedPile.push(playerHand[i]);
-      tempPlayerHand.splice(i, 1);
-    }
-    if (playerHand[i].rank === card2.rank && playerHand[i].suit === card2.suit) {
-      discardedPile.push(playerHand[i]);
-      tempPlayerHand.splice(i, 1);
-    }
-  }
-  return { tempPlayerHand, discardedPile };
-};
-
-/**
  * Computer discard all pairs on hand
  * @param computerHand
  * @param discardedPile
