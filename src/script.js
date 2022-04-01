@@ -186,7 +186,7 @@ const userLogin = () => {
     .then((res) => {
       console.log(res.data);
 
-      findElements('#loginSection').remove();
+      findElements('#loginDiv').remove();
       mainContainer.setAttribute('class', 'px-4 py-5 my-5 text-center');
 
       opponentDashboard.setAttribute('class', 'display-5 fw-bold');
@@ -275,10 +275,32 @@ const turnDone = () => {
 // ============================== DOM Elements ==============================
 // =================================================================================
 
-findElements('#loginButton').addEventListener('click', userLogin);
+// findElements('#loginButton').addEventListener('click', userLogin);
 
 // Main container that will store all other elements
 const mainContainer = createDiv('mainContainer');
+
+// Create items for login page
+// Create divs for login overall, email, password
+const loginDiv = createDiv('loginDiv');
+loginDiv.setAttribute('class', 'form');
+
+const emailDiv = createDiv('emailDiv');
+const passwordDiv = createDiv('passwordDiv');
+// Email
+const emailLabel = createLabel('emailLabel', 'Email');
+const emailInput = createInput('emailInput', 'text');
+emailInput.setAttribute('placeholder', 'Email');
+// Password
+const passwordLabel = createLabel('passwordLabel', 'Password');
+const passwordInput = createInput('passwordInput', 'password');
+passwordInput.setAttribute('placeholder', 'Password');
+// Button
+const loginButton = createButton('loginButton', 'Log in');
+loginButton.addEventListener('click', userLogin);
+
+const loginHeading = document.createElement('p');
+loginHeading.innerText = 'Old Maid';
 
 // Create gameplay dashboard
 const mainGameDashboard = createDiv('mainGameDashboard');
@@ -298,3 +320,7 @@ discardButton.addEventListener('click', discardCards);
 
 const doneRoundButton = createButton('doneRoundButton', 'Done');
 doneRoundButton.addEventListener('click', turnDone);
+
+appendItems(loginDiv, [loginHeading, emailInput, passwordInput, loginButton]);
+appendItems(mainContainer, [loginDiv]);
+appendItems(document.body, [mainContainer]);
