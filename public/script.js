@@ -112,7 +112,7 @@ const createCard = (cardInfo) => {
     if (cardInfo.discardStatus === 'discard') {
       card.classList.add('discard-card');
       card.classList.remove('card');
-    } else if (cardInfo.holdStatus === 'hold') {
+    } else if (cardInfo.discardStatus === 'hold') {
       card.classList.add('card');
       card.classList.remove('discard-card');
     }
@@ -182,7 +182,7 @@ const userLogin = () => {
     .then((res) => {
       console.log(res.data);
 
-      findElements('#mainContainer').remove();
+      findElements('#loginSection').remove();
       mainContainer.setAttribute('class', 'px-4 py-5 my-5 text-center');
 
       opponentDashboard.setAttribute('class', 'display-5 fw-bold');
