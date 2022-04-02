@@ -79,7 +79,7 @@ body {
 /* Card Related CSS */
 .card {
   margin: 5px;
-  padding: 10px;
+  /* padding: 10px; */
   background-color: white;
   width: 100px;
   height: 140px;
@@ -92,7 +92,7 @@ body {
 
 .discard-card {
   margin: 5px;
-  padding: 10px;
+  /* padding: 10px; */
   background-color: white;
   width: 120px;
   height: 180px;

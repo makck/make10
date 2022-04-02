@@ -174,12 +174,12 @@ const checkWin = () => {
   if (currentGame.player1Hand.length === 1) {
     resetElements([mainContainer, opponentDashboard, playerDashboard, opponentCardDisplay, playerCardDisplay, playerOptions]);
 
-    mainContainer.innerText = 'You lose';
+    mainContainer.innerText = 'Aiyaaa.. you are the old maid!!';
     return true;
   } if (currentGame.player1Hand.length === 0) {
     resetElements([mainContainer, opponentDashboard, playerDashboard, opponentCardDisplay, playerCardDisplay, playerOptions]);
 
-    mainContainer.innerText = 'You win';
+    mainContainer.innerText = 'Heng ahh.. you are not the old maid';
     return true;
   }
 };
